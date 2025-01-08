@@ -1,4 +1,4 @@
-do local ui =  game:GetService("CoreGui").RobloxGui.Modules:FindFirstChild("X2ZLIB") if ui then ui:Destroy() end end
+do local ui =  game:GetService("CoreGui").RobloxGui.Modules:FindFirstChil("X2ZLIB") if ui then ui:Destroy() end end
 
 
 if _G.Color == nil then
