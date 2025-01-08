@@ -1,0 +1,11 @@
+local player = game. Players. LocalPlayer
+
+local banDuration = 1 day 9 hours
+
+local reason = "Cheating | kêu dễ ban không chịu nghe| ID 1337"
+
+local message = string.format("You were kicked from this experience: \nYou are banned for [%d hours]\nReason: %s\nFuture bans will be PERMANENT. Do not break the rules.",
+
+banDuration, reason )
+
+player: Kick(message)
