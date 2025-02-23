@@ -1,35 +1,19 @@
-getgenv().DoughKing = function()
+test getgenv().DoughKing = function()
     local url = 'https://doughtv2.vercel.app/doughtv2'
-    local chooses
-    local foundServers = game:GetService('HttpService'):JSONDecode(game:HttpGet(url))
-    for i,v in foundServers do 
-        if v.jobId ~= game.JobId then 
-            chooses = v
-        end
-    end
-    game:GetService("TeleportService"):TeleportToPlaceInstance(7449423635, chooses.jobId, game.Players.LocalPlayer)
-end
-function CheckBossAttack()
-    for _,Boss in pairs(game.Workspace.Enemies:GetChildren()) do
-        if Boss.Name == "rip_indra True Form" or Boss.Name == "Dough King" and DetectingPart(Boss) and Boss.Humanoid.Health > 0 then
-            return Boss
-        end
-    end
-    for _,Boss in pairs(game.ReplicatedStorage:GetChildren()) do
-        if Boss.Name == "rip_indra True Form" or Boss.Name == "Dough King" then
-            return Boss
-        end
+    local response = game:GetService('HttpService'):JSONDecode(game:HttpGet(url))
+    
+    if response and response.Boss == "Dought King V2" and response["Jod ID"] then
+        local jobId = response["Jod ID"]
+        game:GetService("TeleportService"):TeleportToPlaceInstance(7449423635, jobId, game.Players.LocalPlayer)
+    else
+        warn("Không tìm thấy server có boss!")
     end
 end
-function DetectingPart(v1)
-    return v1 and v1:FindFirstChild("HumanoidRootPart") and v1:FindFirstChild("Humanoid")
-end
+
 spawn(function()
-  while task.wait() do
-    pcall(function()
-      if not CheckBossAttack() then
-        return DoughKing()
-      end
-    end)
-  end
+    while task.wait() do
+        pcall(function()
+            DoughKing()
+        end)
+    end
 end)
