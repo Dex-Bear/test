@@ -1,5 +1,5 @@
  getgenv().DoughKing = function()
-    local url = 'http://fi10.bot-hosting.net:20636/doughking'
+    local url = 'https://doughtv2.vercel.app/doughtv2'
     local chooses
     local foundServers = game:GetService('HttpService'):JSONDecode(game:HttpGet(url))
     for i,v in foundServers do 
