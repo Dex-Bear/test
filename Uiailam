@@ -1,0 +1,154 @@
+local Players = game:GetService("Players")
+local ContentProvider = game:GetService("ContentProvider")
+local TweenService = game:GetService("TweenService")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+local UserInputService = game:GetService("UserInputService")
+
+local player = Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+-- XÃ³a UI cÅ© náº¿u tá»“n táº¡i
+local existingGui = playerGui:FindFirstChild("CustomScreenGui")
+if existingGui then
+    existingGui:Destroy()
+end
+
+-- Táº¡o ScreenGui
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "CustomScreenGui"
+ScreenGui.Parent = playerGui
+
+-- Táº¡o Frame UI chÃ­nh
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 320, 0, 220)
+frame.Position = UDim2.new(0.5, 0, 0.5, 0)
+frame.AnchorPoint = Vector2.new(0.5, 0.5)
+frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+frame.BackgroundTransparency = 1 -- áº¨n ban Ä‘áº§u
+frame.BorderSizePixel = 0
+frame.Parent = ScreenGui
+
+local corner = Instance.new("UICorner")
+corner.CornerRadius = UDim.new(0, 12)
+corner.Parent = frame
+
+-- TiÃªu Ä‘á»
+local title = Instance.new("TextLabel")
+title.Size = UDim2.new(1, 0, 0, 40)
+title.BackgroundTransparency = 1
+title.Text = "Vxeze Hub-Dead Rails(Auto Win)"
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.Font = Enum.Font.GothamBold
+title.TextSize = 20
+title.Parent = frame
+
+-- NÃºt Ä‘Ã³ng UI
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0, 30, 0, 30)
+closeButton.Position = UDim2.new(1, -40, 0, 10)
+closeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+closeButton.Text = "X"
+closeButton.TextColor3 = Color3.new(1, 1, 1)
+closeButton.Font = Enum.Font.GothamBold
+closeButton.TextSize = 16
+closeButton.Parent = frame
+
+local closeCorner = Instance.new("UICorner")
+closeCorner.CornerRadius = UDim.new(0, 8)
+closeCorner.Parent = closeButton
+
+-- HÃ m táº¡o button UI
+local function createButton(text, color, position)
+    local button = Instance.new("TextButton")
+    button.Size = UDim2.new(0.85, 0, 0, 45)
+    button.Position = UDim2.new(0.075, 0, position, 0)
+    button.BackgroundColor3 = color
+    button.Text = text
+    button.TextColor3 = Color3.new(1, 1, 1)
+    button.Font = Enum.Font.GothamMedium
+    button.TextSize = 18
+    button.Parent = frame
+
+    local btnCorner = Instance.new("UICorner")
+    btnCorner.CornerRadius = UDim.new(0, 10)
+    btnCorner.Parent = button
+
+    -- Hiá»‡u á»©ng hover
+    button.MouseEnter:Connect(function()
+        TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = color:Lerp(Color3.new(1, 1, 1), 0.2)}):Play()
+    end)
+    button.MouseLeave:Connect(function()
+        TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = color}):Play()
+    end)
+
+    return button
+end
+
+local shopButton = createButton("Npc Lock", Color3.fromRGB(79, 79, 79), 0.3)
+local inventoryButton = createButton("No Clip", Color3.fromRGB(105, 105, 105), 0.5)
+local settingsButton = createButton("Bypass Tp Win", Color3.fromRGB(130, 130, 130), 0.7)
+
+-- Hiá»‡u á»©ng má»Ÿ UI
+frame:TweenSizeAndPosition(
+    UDim2.new(0, 320, 0, 220),
+    UDim2.new(0.5, 0, 0.5, 0),
+    Enum.EasingDirection.Out,
+    Enum.EasingStyle.Quad,
+    0.5,
+    true
+)
+TweenService:Create(frame, TweenInfo.new(0.5), {BackgroundTransparency = 0}):Play()
+
+-- NÃºt Ä‘Ã³ng UI
+closeButton.MouseButton1Click:Connect(function()
+    TweenService:Create(frame, TweenInfo.new(0.3), {Size = UDim2.new(0, 0, 0, 0), BackgroundTransparency = 1}):Play()
+    wait(0.3)
+    frame.Visible = false
+end)
+
+-- NÃºt má»Ÿ/Ä‘Ã³ng UI báº±ng LeftControl
+local isVisible = true
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+    if gameProcessed then return end
+    if input.KeyCode == Enum.KeyCode.LeftControl then
+        isVisible = not isVisible
+        if isVisible then
+            frame.Visible = true
+            TweenService:Create(frame, TweenInfo.new(0.3), {Size = UDim2.new(0, 320, 0, 220), BackgroundTransparency = 0}):Play()
+        else
+            TweenService:Create(frame, TweenInfo.new(0.3), {Size = UDim2.new(0, 0, 0, 0), BackgroundTransparency = 1}):Play()
+            wait(0.3)
+            frame.Visible = false
+        end
+    end
+end)
+
+-- NÃºt ImageButton Ä‘á»ƒ nháº¥n má»Ÿ UI
+local Button = Instance.new("ImageButton")
+Button.Name = "CustomButton"
+Button.Parent = ScreenGui
+Button.Size = UDim2.new(0, 50, 0, 50)
+Button.Position = UDim2.new(0.02, 0, 0.05, 0) -- ÄÆ°a vá» vá»‹ trÃ­ nhÆ° áº£nh
+Button.BackgroundTransparency = 1
+Button.Image = "rbxassetid://91347148253026"
+
+local UICorner = Instance.new("UICorner")
+UICorner.CornerRadius = UDim.new(1, 0)
+UICorner.Parent = Button
+
+-- Preload áº£nh
+local imageLoaded = false
+ContentProvider:PreloadAsync({Button.Image}, function()
+    imageLoaded = true
+end)
+
+-- Khi nháº¥n nÃºt, giáº£ láº­p nháº¥n LeftControl
+Button.MouseButton1Click:Connect(function()
+    if not imageLoaded then return end
+    if VirtualInputManager then
+        task.defer(function()
+            VirtualInputManager:SendKeyEvent(true, Enum.KeyCode.LeftControl, false, game)
+            VirtualInputManager:SendKeyEvent(false, Enum.KeyCode.LeftControl, false, game)
+        end)
+    end
+end)
